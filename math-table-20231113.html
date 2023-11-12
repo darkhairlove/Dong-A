@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Map of math learning steps</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="dataset.js"></script> -->
+<!-- <link rel="stylesheet" href="style.css"> -->
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    :root {
+    --table_width: 220px;
+    --global_padding:50px;
+    --color_pre:#cf7ce8;
+    --color_follow: #788be3;
+    --color_pre_light:#cf7ce866;
+    --color_follow_light: #788be366;
+    --color_e3:#efe69466;
+    --color_e4:#ccef9466;
+    --color_e5:#9def9466;
+    --color_e6:#94efcf66;
+    --color_m1:#949fef66;
+    --color_m2:#af94ef66;
+    --color_m3:#b470b066;
+    --color_h1:#00000050;
+
+    --color_e3-t:#b2ab6e;
+    --color_e4-t:#98b36e;
+    --color_e5-t:#75b26f;
+    --color_e6-t:#68a791;
+    --color_m1-t:#676fa8;
+    --color_m2-t:#7663a1;
+    --color_m3-t:#81507e;
+    --color_h1-t:#00000080;
+
+    --color_m1-t-dark:#676fa8;
+    --color_m2-t-dark:#7663a1;
+    --color_m3-t-dark:#81507e;
+    --color_h1-t-dark:#00000090;
+}
+html, .body {
+    margin: 0;
+    padding: 0;
+    font-size:12px;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+.control {
+    position: fixed;
+    bottom: 10px;
+    z-index: 2000;
+}
+.header {
+    padding: 20px 0 0 20px;
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+.container {
+    width: 100%;
+    /* height: 100vh; */
+    /* overflow: hidden; */
+    padding:20px;
+    box-sizing: border-box;
+    display: flex;
+}
+.right-margin {
+    width:50px;
+}
+
+
+
+
+
+
+.table-group, .lv-group {
+    display: flex !important;
+    flex-direction: row !important;
+}
+.group {
+    display: flex !important;
+    flex-direction: column !important;
+}
+.table {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-right: 2px solid #aaa;
+    position: relative;
+}
+
+
+
+.lv {
+    border-right:#bbb 1px solid;
+    border-bottom:#bbb 1px solid;
+    background-color: #444;
+    position: sticky;
+    color:#fff;
+    padding:4px;
+    display: flex;
+    justify-content: space-between;
+    padding-right:12px;
+    box-sizing: border-box;
+}
+.lv1 {
+    top:0px;
+    z-index: 999;
+}
+.lv2 {
+    top:23.5px;
+    z-index: 998;
+}
+
+    .lv span {
+        display: none;
+        margin-left:4px;
+        background: #eee;
+        color:#000;
+        box-sizing: border-box;
+        padding: 0px 4px;
+        border-radius: 2px;
+    }
+    .lv:hover span {
+        cursor: pointer;
+        display: inline-block;
+    }
+    .lv:hover span:hover {
+        background: #ccc;
+    }
+
+
+
+
+
+.cell {
+    display: flex;
+    flex-direction: row;
+    /* border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc; */
+    border:1px solid #fff;
+    box-sizing: border-box;
+    padding: px;
+    background: #00000008;
+    width: var(--table_width);
+    height:40px;
+    position: relative;
+    cursor: pointer;
+    box-sizing: border-box;
+    /* border-radius: 8px; */
+    /* overflow: hidden; */
+}
+    .cell:hover {
+        background-color: #eee;
+    }
+    .cell:hover .cell_info {
+        color: #666;
+    }
+    .cell.small {
+        height: 24px;
+    }
+    .cell.high.opacity-40 {
+        opacity: 0.4;
+        color:#00000066;
+    }
+    .cell.selected {
+        border: 1px solid #444;
+        background: var(--color_follow);
+    }
+        .cell.selected.s_pre {
+            background: var(--color_pre_light);
+        }
+        .cell.selected.s_follow {
+            background: var(--color_follow_light);
+        }
+    .cell.findRelated {
+        border: 1px solid #444;
+        background: #00000022
+    }
+
+
+
+
+
+.cell_number {
+    width: 18px;
+    height: 100%;
+    text-align: center;
+    background: #00000011;
+    margin-right: 2px;
+    color: #999;
+    padding: 2px;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    }
+    .cell_number.E1 {background: var(--color_e1);color: var(--color_e1-t);}
+    .cell_number.E2 {background: var(--color_e2);color: var(--color_e2-t);}
+    .cell_number.E3 {background: var(--color_e3);color: var(--color_e3-t);}
+    .cell_number.E4 {background: var(--color_e4);color: var(--color_e4-t);}
+    .cell_number.E5 {background: var(--color_e5);color: var(--color_e5-t);}
+    .cell_number.E6 {background: var(--color_e6);color: var(--color_e6-t);}
+
+    .cell_number.M1 {background: var(--color_m1);color: var(--color_m1-t);}
+    .cell_number.M2 {background: var(--color_m2);color: var(--color_m2-t);}
+    .cell_number.M3 {background: var(--color_m3);color: var(--color_m3-t);}
+    .cell_number.H1 {background: var(--color_h1);color: var(--color_h1-t);}
+.cell_content {
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+    .cell_name {
+        position: absolute;
+        padding: 2px;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: calc(var(--table_width) - 32px);
+        height: 16px;
+    }
+    .cell_name:hover {
+        /* height: 26px; */
+        white-space: normal;
+        overflow: visible;
+        z-index: 1;
+    }
+    .cell_name.high {
+        /* color:#00000066; */
+    }
+    .cell_name.small {
+        width:130px;
+    }
+    /* .cell_name:hover ~ .cell_info {
+        color: #00000000;
+    } */
+
+
+
+    .cell_info {
+        position: absolute;
+        top:22px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 0.6rem;
+        color: #bbb;
+        margin-top: 4px;
+        margin-left: 4px;
+        width: calc(var(--table_width) - 34px);
+    }
+        .cell_info_left {
+            display: flex;
+            flex-direction: row;
+        }
+            .cell_info_left > div {
+                margin-right: 4px;
+            }
+        .cell_info_right {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            cursor: pointer;
+            min-width:40px;
+            justify-content: right;
+        }
+            .cell_info_right.small {
+                justify-content: left;
+            }
+            .cell_info_right i {
+                margin-left:1px;
+            }
+            /* .pre {
+                color: var(--color_pre);
+            }
+            .follow {
+                color: var(--color_follow);
+            } */
+            .cell_info_right .E1 {color: var(--color_e1-t);}
+            .cell_info_right .E2 {color: var(--color_e2-t);}
+            .cell_info_right .E3 {color: var(--color_e3-t);}
+            .cell_info_right .E4 {color: var(--color_e4-t);}
+            .cell_info_right .E5 {color: var(--color_e5-t);}
+            .cell_info_right .E6 {color: var(--color_e6-t);}
+            .cell_info_right .M1 {color: var(--color_m1-t);}
+            .cell_info_right .M2 {color: var(--color_m2-t);}
+            .cell_info_right .M3 {color: var(--color_m3-t);}
+            .cell_info_right .H1 {color: var(--color_h1-t);}
+            
+            .cell_info_right:hover .popup {
+                    display: block;
+                }
+
+                
+
+
+
+
+
+.popup {
+        display: none;
+        position: absolute;
+        top: -28px;
+        /* right: -122px; */
+        right:-196px;
+        width:196px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 6px;
+        z-index: 1000;
+        /* white-space: pre-line; */
+        font-size:0.95rem;
+        box-sizing: border-box;
+        cursor: default;
+    }
+    .popup:hover {
+        display: block;
+    }
+    .popup .popup_bullet:hover {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+    .connect_all {
+        font-weight: 600;
+        margin-bottom:4px;
+        background: #444;
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: inline-block;
+    }
+        .connect_all:hover {
+            background: #2e5aa7;
+        }
+        .connect_all span {
+            margin-left:12px;
+            color:#ffffff88;
+        }
+    .popup .t {
+        font-weight: 600;
+        margin-bottom:4px;
+        color:#444;
+    }
+    .popup .t2 {
+        margin: 4px 0;
+    }
+    .bullet_group {
+        display: flex;
+        margin-bottom:4px;
+        cursor: pointer;
+    }
+        .bullet_group i {
+            margin-top: 2px;
+        }
+        .popup_bullet {
+            margin-left: 4px;
+        }
+            .popup_bullet_name {
+                font-weight: 600;;
+            }
+            .popup_bullet_name span {
+                margin-right:6px;
+            }
+            .popup_bullet_code {
+                font-size: 0.6rem;                
+            }
+    .popup .E1 {color: var(--color_e1-t);}
+    .popup .E2 {color: var(--color_e2-t);}
+    .popup .E3 {color: var(--color_e3-t);}
+    .popup .E4 {color: var(--color_e4-t);}
+    .popup .E5 {color: var(--color_e5-t);}
+    .popup .E6 {color: var(--color_e6-t);}
+    .popup .M1 {color: var(--color_m1-t-dark);}
+    .popup .M2 {color: var(--color_m2-t-dark);}
+    .popup .M3 {color: var(--color_m3-t-dark);}
+    .popup .H1 {color: var(--color_h1-t-dark);}
+
+
+
+
+
+
+
+.line-svg {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* width: 100%;
+    height: 100%; */
+    z-index: 700; /* 다른 요소들 위에 오도록 높은 z-index 값 설정 */
+    opacity: 0.7;
+}
+</style>
+</head>
+<body>
+    <div class="header">초중등통합수학 교육 단계 및 연관 학습 </div>
+    <div class="control">
+        <button id="reverse-button">순서 변경 (Q)</button>
+        <button id="minimum-button">구조 최소화 (E)</button>
+        <button id="minimum-width-button">너비 줄이기</button>
+        <button id="reset-button">연결선 초기화 (R)</button>
+    </div>
+<div class="container">
+    <div id="table-group" class="table-group"></div>
+</div>
+
+<script>
+
+let dataset = [
+    {'lv1': '수와 연산', 'data':
+        [{'lv2': '수의 체계', 'data':
+            [
+                {'code':'H1MATA03B01', 'name': '복소수의 뜻과 성질 이해하기', 'archive': '10공수1-02-01', 'pre': '', 'follow': 'H1MATA03B02'},
+                {'code':'M3MATA01B03', 'name': '실수의 대소관계', 'archive': '9수01-09', 'pre': '', 'follow': ''},
+                {'code':'M3MATA01B02', 'name': '무리수와 실수의 개념 이해하기', 'archive': '9수01-08', 'pre': '', 'follow': ''},
+                {'code':'M3MATA01B01', 'name': '제곱근의 뜻과 성질', 'archive': '9수01-07', 'pre': '', 'follow': 'M3MATA01B04, M3MATA03, M3MATA07B01'},
+                {'code':'M2MATA01', 'name': '유리수와 순환소수', 'archive': '9수01-06', 'pre': '', 'follow': ''},
+                {'code':'M1MATA02B02', 'name': '정수와 유리수의 대소관계', 'archive': '9수01-04', 'pre': '', 'follow': ''},
+                {'code':'M1MATA02B01', 'name': '정수와 유리수의 뜻', 'archive': '9수01-03', 'pre': 'E6MATA02B02', 'follow': 'M1MATA02B03, M1MATA02B04, M1MATA02B05, M1MATA05B01'},
+                {'code':'M1MATA01B02', 'name': '최대공약수와 최소공배수', 'archive': '9수01-02', 'pre': '', 'follow': ''},
+                {'code':'M1MATA01B01', 'name': '자연수의 소인수분해', 'archive': '9수01-01', 'pre': '', 'follow': ''},
+                {'code':'E5MATA04B04', 'name': '분수와 소수의 관계', 'archive': '6수01-12', 'pre': '', 'follow': ''},
+                {'code':'E5MATA04B03', 'name': '분수의 크기 비교', 'archive': '6수01-07', 'pre': '', 'follow': ''},
+                {'code':'E5MATA04B02', 'name': '통분', 'archive': '6수01-06', 'pre': '', 'follow': ''},
+                {'code':'E5MATA04B01', 'name': '약분', 'archive': '6수01-06', 'pre': '', 'follow': ''},
+                {'code':'E5MATA03B02', 'name': '배수', 'archive': '6수01-05', 'pre': '', 'follow': ''},
+                {'code':'E5MATA03B01', 'name': '약수', 'archive': '6수01-04', 'pre': '', 'follow': ''},
+                {'code':'E5MATA02B02', 'name': '어림하기', 'archive': '6수01-03', 'pre': 'E3MATA03B05', 'follow': 'E6MATA02B04'},
+                {'code':'E5MATA02B01', 'name': '수의 범위', 'archive': '6수01-02', 'pre': '', 'follow': ''},
+                {'code':'E4MATA04B02', 'name': '소수의 크기 비교', 'archive': '4수01-14', 'pre': '', 'follow': ''},
+                {'code':'E4MATA04B01', 'name': '소수 두 자리 수/소수 세 자리 수', 'archive': '4수01-13', 'pre': '', 'follow': 'E4MATA04B03,E4MATA04B04'},
+                {'code':'E4MATA01B02', 'name': '수의 크기 비교', 'archive': '4수01-02', 'pre': '', 'follow': ''},
+                {'code':'E4MATA01B01', 'name': '다섯 자리 이상의 수', 'archive': '4수01-01', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B02C09', 'name': '소수의 크기 비교하기', 'archive': '4수01-14', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B02C08', 'name': '1보다 큰 소수 한 자리 수 이해하기', 'archive': '4수01-12', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B02C07', 'name': '1보다 작은 소수 한 자리 수 이해하기', 'archive': '4수01-12', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B01C06', 'name': '단위분수의 크기 비교하기', 'archive': '4수01-11', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B01C05', 'name': '분모가 같은 분수의 크기 비교하기', 'archive': '4수01-11', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B01C04', 'name': '가분수를 대분수로 나타내기/대분수를 가분수로 나타내기', 'archive': '4수01-10', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B01C03', 'name': '단위분수/진분수/가분수/대분수의 뜻 알기', 'archive': '4수01-10', 'pre': '', 'follow': 'E4MATA03'},
+                {'code':'E3MATA04B01C02', 'name': '전체에 대해 분수만큼 구하기', 'archive': '4수01-09', 'pre': '', 'follow': ''},
+                {'code':'E3MATA04B01C01', 'name': '분수 읽고 쓰기', 'archive': '4수01-09', 'pre': '', 'follow': ''},
+            ]
+        },
+        {'lv2': '수의 연산', 'data':
+            [
+            {'code':'H1MATA03B02', 'name': '개념', 'archive': '10공수1-02-01', 'pre': 'H1MATA03B01', 'follow': ''},
+            {'code':'M3MATA01B04', 'name': '근호를 포함한 식의 계산', 'archive': '9수01-10', 'pre': 'M3MATA01B01', 'follow': ''},
+            {'code':'M1MATA02B05', 'name': '정수와 유리수의 나눗셈', 'archive': '9수01-05', 'pre': 'M1MATA02B01', 'follow': 'M1MATA03B02'},
+            {'code':'M1MATA02B04', 'name': '정수와 유리수의 곱셈', 'archive': '9수01-05', 'pre': 'M1MATA02B01', 'follow': ''},
+            {'code':'M1MATA02B03', 'name': '정수와 유리수의 덧셈과 뺄셈', 'archive': '9수01-05', 'pre': 'M1MATA02B01', 'follow': ''},
+            {'code':'E6MATA02B04', 'name': '(자연수)÷(소수)', 'archive': '6수01-15', 'pre': 'E5MATA02B02', 'follow': ''},
+            {'code':'E6MATA02B03', 'name': '(소수)÷(소수)', 'archive': '6수01-15', 'pre': '', 'follow': ''},
+            {'code':'E6MATA02B02', 'name': '(자연수)÷(자연수)', 'archive': '6수01-14', 'pre': '', 'follow': 'M1MATA02B01'},
+            {'code':'E6MATA02B01', 'name': '(소수)÷(자연수)', 'archive': '6수01-15', 'pre': '', 'follow': ''},
+            {'code':'E6MATA01B03', 'name': '(분수)÷(분수)', 'archive': '6수01-11', 'pre': '', 'follow': ''},
+            {'code':'E6MATA01B02', 'name': '(분수)÷(자연수)', 'archive': '6수01-11', 'pre': '', 'follow': ''},
+            {'code':'E6MATA01B01', 'name': '(자연수)÷(자연수)의 몫을 분수로 나타내기', 'archive': '6수01-10', 'pre': '', 'follow': ''},
+            {'code':'E5MATA07', 'name': '소수의 곱셈', 'archive': '6수01-13', 'pre': '', 'follow': ''},
+            {'code':'E5MATA06', 'name': '분수의 곱셈', 'archive': '6수01-09', 'pre': '', 'follow': ''},
+            {'code':'E5MATA05', 'name': '분수의 덧셈과 뺄셈', 'archive': '6수01-08', 'pre': '', 'follow': ''},
+            {'code':'E5MATA01', 'name': '자연수의 혼합 계산', 'archive': '6수01-01', 'pre': '', 'follow': ''},
+            {'code':'E4MATA04B04', 'name': '소수의 뺄셈', 'archive': '4수01-16', 'pre': 'E4MATA04B01', 'follow': ''},
+            {'code':'E4MATA04B03', 'name': '소수의 덧셈', 'archive': '4수01-16', 'pre': 'E4MATA04B01', 'follow': ''},
+            {'code':'E4MATA03', 'name': '분수의 덧셈과 뺄셈', 'archive': '4수01-15', 'pre': 'E3MATA04B01C03', 'follow': ''},
+            {'code':'E4MATA02B03', 'name': '(세 자리 수)÷(두 자리 수)', 'archive': '4수01-07', 'pre': '', 'follow': ''},
+            {'code':'E4MATA02B02', 'name': '(두 자리 수)÷(두 자리 수)', 'archive': '4수01-07', 'pre': '', 'follow': ''},
+            {'code':'E4MATA02B01', 'name': '(세 자리 수)×(두 자리 수)', 'archive': '4수01-04', 'pre': '', 'follow': ''},
+            {'code':'E3MATA03B04', 'name': '(세 자리 수)÷(한 자리 수)', 'archive': '4수01-06', 'pre': '', 'follow': ''},
+            {'code':'E3MATA03B03', 'name': '(두 자리 수)÷(한 자리 수)', 'archive': '4수01-06', 'pre': '', 'follow': ''},
+            {'code':'E3MATA03B05', 'name': '나눗셈 상황에서 어림셈', 'archive': '4수01-08', 'pre': '', 'follow': 'E5MATA02B02'},
+            {'code':'E3MATA03B02', 'name': '나눗셈의 몫과 나머지', 'archive': '4수01-06', 'pre': '', 'follow': ''},
+            {'code':'E3MATA03B01', 'name': '나눗셈식', 'archive': '4수01-05', 'pre': '', 'follow': ''},
+            {'code':'E3MATA02B03', 'name': '곱하는 수가 두 자리 수인 곱셈', 'archive': '4수01-04', 'pre': '', 'follow': ''},
+            {'code':'E3MATA02B02', 'name': '(세 자리 수)x(한 자리 수)', 'archive': '4수01-04', 'pre': '', 'follow': ''},
+            {'code':'E3MATA02B01', 'name': '(두 자리 수)x(한 자리 수)', 'archive': '4수01-04', 'pre': '', 'follow': ''},
+            {'code':'E3MATA02B04', 'name': '곱셈 상황에서 어림셈', 'archive': '4수01-08', 'pre': '', 'follow': ''},
+            {'code':'E3MATA01B02', 'name': '세 자리 수의 뺄셈', 'archive': '4수01-03', 'pre': '', 'follow': ''},
+            {'code':'E3MATA01B01', 'name': '세 자리 수의 덧셈', 'archive': '4수01-03', 'pre': '', 'follow': ''},
+            {'code':'E3MATA01B03', 'name': '세 자리 수의 덧셈과 뺄셈 상황에서 어림셈', 'archive': '4수01-08', 'pre': '', 'follow': ''},
+            ]
+        },
+        {'lv2': '행렬', 'data':
+            [
+            {'code':'H1MATA08B02', 'name': '행렬의 연산', 'archive': '10공수1-04-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA08B01', 'name': '행렬', 'archive': '10공수1-04-01', 'pre': '', 'follow': ''},
+            ]
+        },
+        {'lv2': '집합과 명제', 'data':
+            [
+            {'code':'H1MATA13B04', 'name': '절대부등식 증명하기', 'archive': '10공수2-02-08', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B03', 'name': '대우를 이용한 증명법과 귀류법 이해하기', 'archive': '10공수2-02-07', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B02C06', 'name': '필요조건과 충분조건 이해하기', 'archive': '10공수2-02-06', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B02C05', 'name': '명제의 역과 대우 이해하기', 'archive': '10공수2-02-05', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B02C04', 'name': '명제와 조건의 뜻 이해하기', 'archive': '10공수2-02-04', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B01C03', 'name': '집합의 연산 이해하기', 'archive': '10공수2-02-03', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B01C02', 'name': '두 집합 사이의 포함관계 판단하기', 'archive': '10공수2-02-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA13B01C01', 'name': '집합의 개념을 이해하고 표현하기', 'archive': '10공수2-02-01', 'pre': '', 'follow': 'H1MATA14B01C01'},
+            ]
+        },
+        
+        ]
+    },
+    {'lv1': '변화와 관계', 'data':
+        [
+        {'lv2': '식의 계산', 'data':
+            [
+            {'code':'H1MATA12B02', 'name': '대칭이동', 'archive': '10공수2-01-07', 'pre': '', 'follow': ''},
+            {'code':'H1MATA12B01', 'name': '평행이동', 'archive': '10공수2-01-06', 'pre': '', 'follow': ''},
+            {'code':'H1MATA11B02', 'name': '원과 직선의 위치 관계', 'archive': '10공수2-01-05', 'pre': '', 'follow': ''},
+            {'code':'H1MATA11B01', 'name': '원의 방정식', 'archive': '10공수2-01-04', 'pre': 'M2MATA04B03', 'follow': ''},
+            {'code':'H1MATA10B02', 'name': '점과 직선 사이의 거리 구하기', 'archive': '10공수2-01-03', 'pre': '', 'follow': ''},
+            {'code':'H1MATA10B01', 'name': '두 직선의 평행과 수직', 'archive': '10공수2-01-02', 'pre': 'M2MATA04B03', 'follow': ''},
+            {'code':'H1MATA09B01', 'name': '선분의 내분', 'archive': '10공수2-01-01', 'pre': 'M2MATA08B01', 'follow': ''},
+            {'code':'H1MATA06B03', 'name': '이차부등식', 'archive': '10공수1-02-11', 'pre': 'M3MATA04B02', 'follow': ''},
+            {'code':'H1MATA06B02', 'name': '절댓값을 포함하는 일차부등식의 풀이', 'archive': '10공수1-02-10', 'pre': '', 'follow': ''},
+            {'code':'H1MATA06B01', 'name': '미지수가 1개인 연립일차부등식의 풀이', 'archive': '10공수1-02-09', 'pre': '', 'follow': ''},
+            {'code':'H1MATA05B02', 'name': '미지수가 2개인 연립이차방정식', 'archive': '10공수1-02-08', 'pre': '', 'follow': ''},
+            {'code':'H1MATA05B01', 'name': '삼차방정식과 사차방정식', 'archive': '10공수1-02-07', 'pre': '', 'follow': ''},
+            {'code':'H1MATA04B02', 'name': '이차방정식의 근과 계수의 관계 이해하기', 'archive': '10공수1-02-03', 'pre': '', 'follow': ''},
+            {'code':'H1MATA04B01', 'name': '이차방정식의 근과 판별식', 'archive': '10공수1-02-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA02B03', 'name': '다항식의 인수분해', 'archive': '10공수1-01-03', 'pre': '', 'follow': ''},
+            {'code':'H1MATA02B02', 'name': '나머지정리', 'archive': '10공수1-01-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA02B01', 'name': '항등식의 성질 이해하기', 'archive': '10공수1-01-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA01', 'name': '다항식의 연산', 'archive': '10공수1-01-01', 'pre': '', 'follow': ''},
+            {'code':'M3MATA03', 'name': '이차방정식', 'archive': '9수02-20', 'pre': 'M3MATA01B01', 'follow': 'M3MATA04B02,H1MATA04B03'},
+            {'code':'M3MATA02', 'name': '다항식의 곱셈과 인수분해', 'archive': '9수02-19', 'pre': '', 'follow': ''},
+            {'code':'M2MATA03B03', 'name': '연립일차방정식의 풀이와 활용', 'archive': '9수02-13', 'pre': '', 'follow': 'M2MATA05B02'},
+            {'code':'M2MATA03B02', 'name': '일차부등식의 풀이와 활용', 'archive': '9수02-12', 'pre': '', 'follow': ''},
+            {'code':'M2MATA03B01', 'name': '부등식의 해와 그 성질', 'archive': '9수02-11', 'pre': '', 'follow': ''},
+            {'code':'M2MATA02B03', 'name': '다항식의 곱셈과 나눗셈', 'archive': '9수02-10', 'pre': '', 'follow': ''},
+            {'code':'M2MATA02B02', 'name': '다항식의 덧셈과 뺼셈하기', 'archive': '9수02-09', 'pre': '', 'follow': ''},
+            {'code':'M2MATA02B01', 'name': '지수법칙', 'archive': '9수02-08', 'pre': '', 'follow': ''},
+            {'code':'M1MATA04B03', 'name': '일차방정식의 풀이와 활용', 'archive': '9수02-04', 'pre': '', 'follow': ''},
+            {'code':'M1MATA04B02', 'name': '등식의 성질 알아보기', 'archive': '9수02-03', 'pre': '', 'follow': ''},
+            {'code':'M1MATA04B01', 'name': '방정식과 그 해', 'archive': '9수02-03', 'pre': '', 'follow': ''},
+            {'code':'M1MATA03B03', 'name': '일차식의 덧셈과 뺄셈', 'archive': '9수02-02', 'pre': '', 'follow': ''},
+            {'code':'M1MATA03B02', 'name': '식의 값 구하기', 'archive': '9수02-01', 'pre': 'M1MATA02B05', 'follow': ''},
+            {'code':'M1MATA03B01', 'name': '문자의 사용', 'archive': '9수02-01', 'pre': '', 'follow': ''},
+            {'code':'E6MATA04B03', 'name': '비례배분 문제 해결', 'archive': '6수02-05', 'pre': '', 'follow': ''},
+            {'code':'E6MATA04B02', 'name': '비례식 문제 해결', 'archive': '6수02-04', 'pre': '', 'follow': 'M1MATA08B02C07'},
+            {'code':'E6MATA04B01', 'name': '비와 비례식', 'archive': '6수02-04', 'pre': 'E6MATA03B01', 'follow': 'M1MATA05B03'},
+            ]
+        },
+        {'lv2': '함수(관계)', 'data':
+            [
+            {'code':'H1MATA14B03', 'name': '무리함수', 'archive': '10공수2-03-05', 'pre': '', 'follow': ''},
+            {'code':'H1MATA14B02', 'name': '유리함수', 'archive': '10공수2-03-04', 'pre': '', 'follow': ''},
+            {'code':'H1MATA14B01C03', 'name': '역함수 구하기', 'archive': '10공수2-03-03', 'pre': '', 'follow': ''},
+            {'code':'H1MATA14B01C02', 'name': '합성함수 구하기', 'archive': '10공수2-03-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA14B01C01', 'name': '함수의 개념 이해하기', 'archive': '10공수2-03-01', 'pre': 'H1MATA13B01C01', 'follow': ''},
+            {'code':'H1MATA04B05', 'name': '이차함수의 최대과 최소', 'archive': '10공수1-02-06', 'pre': '', 'follow': ''},
+            {'code':'H1MATA04B04', 'name': '이차함수의 그래프와 직선의 위치 관계 이해하기', 'archive': '10공수1-02-05', 'pre': '', 'follow': ''},
+            {'code':'H1MATA04B03', 'name': '이차방정식과 이차함수의 관계 이해하기', 'archive': '10공수1-02-04', 'pre': 'M3MATA03', 'follow': ''},
+            {'code':'M3MATA04B02', 'name': '이차함수의 그래프', 'archive': '9수02-22', 'pre': 'M3MATA03', 'follow': 'H1MATA06B03'},
+            {'code':'M3MATA04B01', 'name': '이차함수의 개념 이해하기', 'archive': '9수02-21', 'pre': '', 'follow': ''},
+            {'code':'M2MATA05B02', 'name': '두 일차함수의 그래프와 연립일차방정식의 관계', 'archive': '9수02-18', 'pre': 'M2MATA03B03', 'follow': ''},
+            {'code':'M2MATA05B01', 'name': '일차함수와 미지수가 2개인 일차방정식의 관계', 'archive': '9수02-17', 'pre': '', 'follow': ''},
+            {'code':'M2MATA04B03', 'name': '일차함수의 그래프의 성질과 그래프를 활용한 문제해결', 'archive': '9수02-16', 'pre': '', 'follow': 'H1MATA10B01,H1MATA11B01'},
+            {'code':'M2MATA04B02', 'name': '일차함수의 개념과 그 그래프', 'archive': '9수02-15', 'pre': '', 'follow': ''},
+            {'code':'M2MATA04B01', 'name': '함수의 개념 이해하기', 'archive': '9수02-14', 'pre': '', 'follow': ''},
+            {'code':'M1MATA05B03', 'name': '정비례와 반비례 알아보기', 'archive': '9수02-07', 'pre': 'E6MATA04B01', 'follow': ''},
+            {'code':'M1MATA05B02', 'name': '그래프 알아보기', 'archive': '9수02-06', 'pre': '', 'follow': ''},
+            {'code':'M1MATA05B01', 'name': '순서쌍과 좌표', 'archive': '9수02-05', 'pre': 'M1MATA02B01', 'follow': 'M3MATA07B03'},
+            {'code':'E6MATA03B02', 'name': '비율', 'archive': '6수02-03', 'pre': '', 'follow': 'E6MATA10B01,E6MATA10B02,M1MATA10B04'},
+            {'code':'E6MATA03B01', 'name': '두 수의 비', 'archive': '6수02-02', 'pre': '', 'follow': 'E6MATA04B01,M2MATA07B01C03'},
+            {'code':'E5MATA08', 'name': '대응 관계', 'archive': '6수02-01', 'pre': '', 'follow': ''},
+            {'code':'E4MATA05B03', 'name': '등호와 동치 관계', 'archive': '4수02-03', 'pre': '', 'follow': ''},
+            {'code':'E4MATA05B02', 'name': '계산식의 배열에서 규칙 찾기', 'archive': '4수02-02', 'pre': '', 'follow': ''},
+            {'code':'E4MATA05B01', 'name': '다양한 변화 규칙 찾기', 'archive': '4수02-01', 'pre': '', 'follow': ''},
+            ]
+        },
+        ]
+    },
+    {'lv1': '도형과 측정', 'data':
+        [
+        {'lv2': '도형', 'data':
+            [
+            {'code':'M3MATA06B02', 'name': '원주각의 성질', 'archive': '9수03-19', 'pre': '', 'follow': ''},
+            {'code':'M3MATA06B01', 'name': '원과 직선', 'archive': '9수03-18', 'pre': '', 'follow': ''},
+            {'code':'M3MATA05B01', 'name': '삼각비의 뜻 이해하기', 'archive': '9수03-16', 'pre': '', 'follow': 'M3MATA05B02'},
+            {'code':'M2MATA08B01', 'name': '피타고라스 정리 이해하기', 'archive': '9수03-15', 'pre': '', 'follow': 'H1MATA09B01,M3MATA05B02,M2MATA08B02'},
+            {'code':'M2MATA07B03', 'name': '평행선 사이의 선분의 길이의 비', 'archive': '9수03-14', 'pre': '', 'follow': ''},
+            {'code':'M2MATA07B02', 'name': '삼각형의 닮음 조건', 'archive': '9수03-13', 'pre': '', 'follow': ''},
+            {'code':'M2MATA07B01C02', 'name': '닮은 도형의 성질 이해하기', 'archive': '9수03-12', 'pre': '', 'follow': 'M2MATA07B01C03'},
+            {'code':'M2MATA07B01C01', 'name': '닮은 도형의 뜻 이해하기', 'archive': '9수03-12', 'pre': '', 'follow': ''},
+            {'code':'M2MATA06B03', 'name': '사각형의 성질', 'archive': '9수03-11', 'pre': '', 'follow': ''},
+            {'code':'M2MATA06B02', 'name': '삼각형의 외심과 내심의 의미와 성질 이해하기', 'archive': '9수03-10', 'pre': '', 'follow': ''},
+            {'code':'M2MATA06B01', 'name': '이등변삼각형의 성질', 'archive': '9수03-09', 'pre': '', 'follow': ''},
+            {'code':'M1MATA09B02', 'name': '회전체', 'archive': '9수03-07', 'pre': '', 'follow': ''},
+            {'code':'M1MATA09B01', 'name': '다면체', 'archive': '9수03-07', 'pre': '', 'follow': ''},
+            {'code':'M1MATA08B02C07', 'name': '부채꼴의 중심각의 크기와 호의 길이/넓이 사이의 관계 이해하기', 'archive': '9수03-06', 'pre': 'E6MATA04B02', 'follow': ''},
+            {'code':'M1MATA08B02C06', 'name': '호/현/부채꼴/활꼴의 뜻 이해하기', 'archive': '9수03-06', 'pre': '', 'follow': ''},
+            {'code':'M1MATA08B01C02', 'name': '다각형/다각형의 내각과 외각의 뜻 이해하기', 'archive': '9수03-05', 'pre': '', 'follow': ''},
+            {'code':'M1MATA08B01C01', 'name': '삼각형의 내각과 외각의 뜻과 성질 이해하기', 'archive': '9수03-05', 'pre': '', 'follow': ''},
+            {'code':'M1MATA07B02', 'name': '삼각형의 합동', 'archive': '9수03-04', 'pre': '', 'follow': ''},
+            {'code':'M1MATA07B01', 'name': '삼각형 작도하기', 'archive': '9수03-03', 'pre': '', 'follow': ''},
+            {'code':'M1MATA06B04', 'name': '평행선의 성질', 'archive': '9수03-02', 'pre': '', 'follow': ''},
+            {'code':'M1MATA06B03', 'name': '위치관계', 'archive': '9수03-01', 'pre': '', 'follow': ''},
+            {'code':'M1MATA06B02', 'name': '각', 'archive': '9수03-01', 'pre': '', 'follow': ''},
+            {'code':'M1MATA06B01', 'name': '점/선/면', 'archive': '9수03-01', 'pre': '', 'follow': ''},
+            {'code':'E6MATA07B02', 'name': '쌓은 모양 알아보기', 'archive': '6수03-10', 'pre': '', 'follow': ''},
+            {'code':'E6MATA07B01', 'name': '쌓기나무 수 알아보기', 'archive': '6수03-09', 'pre': '', 'follow': ''},
+            {'code':'E6MATA06B03', 'name': '구', 'archive': '6수03-07', 'pre': '', 'follow': 'M1MATA09B03'},
+            {'code':'E6MATA06B02', 'name': '원뿔', 'archive': '6수03-07', 'pre': '', 'follow': 'M1MATA09B03'},
+            {'code':'E6MATA06B01C02', 'name': '원기둥의 전개도 알기', 'archive': '6수03-08', 'pre': '', 'follow': 'M1MATA09B03'},
+            {'code':'E6MATA06B01C01', 'name': '원기둥의 이해와 구성요소 알기', 'archive': '6수03-07', 'pre': 'E6MATA08B01C01', 'follow': ''},
+            {'code':'E6MATA05B03', 'name': '각기둥의 전개도', 'archive': '6수03-06', 'pre': '', 'follow': 'M1MATA09B03'},
+            {'code':'E6MATA05B02', 'name': '각뿔', 'archive': '6수03-05', 'pre': '', 'follow': ''},
+            {'code':'E6MATA05B01', 'name': '각기둥', 'archive': '6수03-05', 'pre': '', 'follow': ''},
+            {'code':'E5MATA10B02', 'name': '직육면체/정육면체의 겨냥도와 전개도', 'archive': '6수03-04', 'pre': '', 'follow': 'E6MATA09B01,M1MATA09B03'},
+            {'code':'E5MATA10B01', 'name': '직육면체의 구성 요소와 성질', 'archive': '6수03-03', 'pre': '', 'follow': ''},
+            {'code':'E5MATA09B02', 'name': '선대칭도형과 점대칭도형', 'archive': '6수03-02', 'pre': '', 'follow': ''},
+            {'code':'E5MATA09B01', 'name': '합동', 'archive': '6수03-01', 'pre': '', 'follow': ''},
+            {'code':'E4MATA09B02', 'name': '여러가지 모양 만들기와 채우기', 'archive': '4수03-12', 'pre': '', 'follow': ''},
+            {'code':'E4MATA09B01', 'name': '다각형과 정다각형', 'archive': '4수03-11', 'pre': '', 'follow': 'E5MATA11B01'},
+            {'code':'E4MATA08B02', 'name': '여러가지 사각형', 'archive': '4수03-10', 'pre': '', 'follow': 'E5MATA11B04'},
+            {'code':'E4MATA08B01', 'name': '수직/평행', 'archive': '4수03-03', 'pre': '', 'follow': ''},
+            {'code':'E4MATA07B02', 'name': '각의 크기에 따른 삼각형의 분류', 'archive': '4수03-09', 'pre': '', 'follow': ''},
+            {'code':'E4MATA10B02', 'name': '예각/둔각', 'archive': '4수03-02', 'pre': '', 'follow': ''},
+            {'code':'E4MATA10B01', 'name': '각의 크기', 'archive': '4수03-24', 'pre': '', 'follow': 'E4MATA10B03'},
+            {'code':'E4MATA07B01', 'name': '변의 길이에 따른 삼각형의 분류', 'archive': '4수03-08', 'pre': '', 'follow': ''},
+            {'code':'E4MATA06B02', 'name': '점의 이동', 'archive': '4수03-05', 'pre': '', 'follow': ''},
+            {'code':'E4MATA06B01', 'name': '평면도형의 이동', 'archive': '4수03-04', 'pre': '', 'follow': ''},
+            {'code':'E3MATA05B05', 'name': '사각형', 'archive': '4수03-10', 'pre': '', 'follow': 'E5MATA11B03'},
+            {'code':'E3MATA05B04', 'name': '삼각형', 'archive': '4수03-09', 'pre': '', 'follow': ''},
+            {'code':'E3MATA05B03C05', 'name': '컴퍼스로 원 그리기', 'archive': '4수03-07', 'pre': '', 'follow': ''},
+            {'code':'E3MATA05B03C04', 'name': '원의 중심/지름/반지름 알기', 'archive': '4수03-06', 'pre': '', 'follow': 'E6MATA08B01C03,E6MATA08B01C02,E6MATA08B01C01'},
+            {'code':'E3MATA05B02', 'name': '각', 'archive': '4수03-02', 'pre': '', 'follow': ''},
+            {'code':'E3MATA05B01', 'name': '선의 종류', 'archive': '4수03-01', 'pre': '', 'follow': ''},
+            ]
+        },
+        {'lv2': '측정', 'data':
+            [
+            {'code':'M3MATA05B03', 'name': '삼각비의 활용', 'archive': '9수03-17', 'pre': '', 'follow': ''},
+            {'code':'M3MATA05B02', 'name': '삼각비의 값 구하기', 'archive': '9수03-16', 'pre': 'M3MATA05B01,M2MATA08B01', 'follow': ''},
+            {'code':'M2MATA08B02', 'name': '피타고라스 정리를 이용하여 직각삼각형인지 판별하기', 'archive': '9수03-15', 'pre': 'M2MATA08B01', 'follow': ''},
+            {'code':'M2MATA07B01C03', 'name': '닮음비 구하기', 'archive': '9수03-12', 'pre': 'M2MATA07B01C02,E6MATA03B01', 'follow': ''},
+            {'code':'M1MATA09B04', 'name': '입체도형의 부피', 'archive': '9수03-08', 'pre': '', 'follow': ''},
+            {'code':'M1MATA09B03', 'name': '입체도형의 겉넓이', 'archive': '9수03-08', 'pre': 'E5MATA10B02,E6MATA05B03,E6MATA06B01C02,E6MATA06B02,E6MATA06B03', 'follow': ''},
+            {'code':'M1MATA08B02C08', 'name': '부채꼴의 호의 길이와 넓이 구하기', 'archive': '9수03-06', 'pre': '', 'follow': ''},
+            {'code':'M1MATA08B01C05', 'name': '다각형의 외각의 크기의 합 구하기', 'archive': '9수03-05', 'pre': '', 'follow': ''},
+            {'code':'M1MATA08B01C04', 'name': '다각형의 내각의 크기의 합 구하기', 'archive': '9수03-05', 'pre': '', 'follow': ''},
+            {'code':'M1MATA08B01C03', 'name': '다각형의 대각선의 개수 구하기', 'archive': '9수03-05', 'pre': '', 'follow': ''},
+            {'code':'E6MATA09B02C04', 'name': '직육면체/정육면체의 부피 구하기', 'archive': '6수03-19', 'pre': '', 'follow': ''},
+            {'code':'E6MATA09B02C03', 'name': '부피 단위 1㎤/1㎥ 알아보기', 'archive': '6수03-18', 'pre': '', 'follow': ''},
+            {'code':'E6MATA09B01', 'name': '직육면체의 겉넓이', 'archive': '6수03-17', 'pre': 'E5MATA10B02', 'follow': ''},
+            {'code':'E6MATA08B02', 'name': '원의 넓이', 'archive': '6수03-16', 'pre': '', 'follow': ''},
+            {'code':'E6MATA08B01C03', 'name': '원주율을 이용하여 원주 구하기', 'archive': '6수03-16', 'pre': 'E3MATA05B03C04', 'follow': ''},
+            {'code':'E6MATA08B01C02', 'name': '원주율의 근삿값 알기', 'archive': '6수03-15', 'pre': 'E3MATA05B03C04', 'follow': ''},
+            {'code':'E6MATA08B01C01', 'name': '원주와 지름의 관계 알기', 'archive': '6수03-15', 'pre': 'E3MATA05B03C04', 'follow': 'E6MATA06B01C01'},
+            {'code':'E5MATA11B04', 'name': '평행사변형/삼각형/사다리꼴/마름모의 넓이', 'archive': '6수03-14', 'pre': 'E4MATA08B02', 'follow': ''},
+            {'code':'E5MATA11B03', 'name': '직사각형과 정사각형의 넓이', 'archive': '6수03-13', 'pre': 'E3MATA05B05', 'follow': ''},
+            {'code':'E5MATA11B02', 'name': '넓이 단위', 'archive': '6수03-12', 'pre': '', 'follow': ''},
+            {'code':'E5MATA11B01', 'name': '평면도형의 둘레', 'archive': '6수03-11', 'pre': 'E4MATA09B01', 'follow': ''},
+            {'code':'E4MATA10B03', 'name': '각도의 합과 차', 'archive': '4수03-25', 'pre': 'E4MATA10B01', 'follow': ''},
+            {'code':'E3MATA07B02C07', 'name': '무게의 덧셈과 뺄셈 계산하기', 'archive': '4수03-23', 'pre': '', 'follow': ''},
+            {'code':'E3MATA07B02C06', 'name': '1t 알기/1t과 1kg의 관계 이해하기', 'archive': '4수03-22', 'pre': '', 'follow': ''},
+            {'code':'E3MATA07B02C05', 'name': '1kg과 1g의 관계 이해하기/무게를 "몇 kg 몇 g"과 "몇 g"으로 표현하기', 'archive': '4수03-21', 'pre': '', 'follow': ''},
+            {'code':'E3MATA07B02C04', 'name': '1g과 1kg 알기/무게를 측정하고 어림하기', 'archive': '4수03-20', 'pre': '', 'follow': ''},
+            {'code':'E3MATA07B01C03', 'name': '들이의 덧셈과 뺄셈 계산하기', 'archive': '4수03-19', 'pre': '', 'follow': ''},
+            {'code':'E3MATA07B01C02', 'name': '1L와 1mL 관계 이해하기/들이를 "몇 L 몇 mL"와 "몇 mL"로 표현하기', 'archive': '4수03-18', 'pre': '', 'follow': ''},
+            {'code':'E3MATA07B01C01', 'name': '1mL와 1L 알기/들이를 측정하고 어림하기', 'archive': '4수03-17', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B02C07', 'name': '시간의 덧셈과 뺄셈하기', 'archive': '4수03-14', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B02C06', 'name': '초 단위까지 시각 읽기', 'archive': '4수03-13', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B02C05', 'name': '1분과 1초의 관계 이해하기', 'archive': '4수03-13', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B01C04', 'name': '1km와 1m의 관계 이해하기/거리를 "몇 km 몇 m"와 "몇 m"로 표현하기', 'archive': '4수03-16', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B01C03', 'name': '1cm와 1mm의 관계 이해하기/길이를 "몇 cm 몇 mm"와 "몇 mm"로 표현하기', 'archive': '4수03-16', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B01C02', 'name': '1km 알기/거리를 측정하고 어림하기', 'archive': '4수03-15', 'pre': '', 'follow': ''},
+            {'code':'E3MATA06B01C01', 'name': '1mm 알기/길이를 측정하고 어림하기', 'archive': '4수03-15', 'pre': '', 'follow': ''},
+            ]
+        },
+        ]
+    },
+    {'lv1': '자료와 가능성', 'data':
+        [
+        {'lv2': '자료의 분석', 'data':
+            [
+            {'code':'M3MATA07B03', 'name': '산점도', 'archive': '9수04-09', 'pre': 'M1MATA05B01', 'follow': ''},
+            {'code':'M3MATA07B02', 'name': '상자그림', 'archive': '9수04-08', 'pre': '', 'follow': ''},
+            {'code':'M3MATA07B01', 'name': '산포도', 'archive': '9수04-07', 'pre': 'M3MATA01B01', 'follow': ''},
+            {'code':'M1MATA10B05', 'name': '공학적 도구를 이용하여 자료를 정리하고 해석하기', 'archive': '9수04-04', 'pre': '', 'follow': ''},
+            {'code':'M1MATA10B04', 'name': '상대도수', 'archive': '9수04-03', 'pre': 'E6MATA03B02', 'follow': ''},
+            {'code':'M1MATA10B03', 'name': '히스토그램과 도수분포다각형', 'archive': '9수04-02', 'pre': '', 'follow': ''},
+            {'code':'M1MATA10B02', 'name': '줄기와 잎 그림/도수분포표로', 'archive': '9수04-02', 'pre': '', 'follow': ''},
+            {'code':'M1MATA10B01', 'name': '대푯값', 'archive': '9수04-01', 'pre': '', 'follow': ''},
+            {'code':'E6MATA10B03', 'name': '알맞은 그래프로 나타내기', 'archive': '6수04-03', 'pre': '', 'follow': ''},
+            {'code':'E6MATA10B02', 'name': '원그래프', 'archive': '6수04-02', 'pre': 'E6MATA03B02', 'follow': ''},
+            {'code':'E6MATA10B01', 'name': '띠그래프', 'archive': '6수04-02', 'pre': 'E6MATA03B02', 'follow': ''},
+            {'code':'E5MATA12B01', 'name': '평균', 'archive': '6수04-01', 'pre': '', 'follow': ''},
+            {'code':'E4MATA11B03', 'name': '적절한 그래프로 나타내기', 'archive': '4수04-03', 'pre': '', 'follow': ''},
+            {'code':'E4MATA11B02', 'name': '꺾은선그래프', 'archive': '4수04-02', 'pre': '', 'follow': ''},
+            {'code':'E4MATA11B01', 'name': '막대그래프', 'archive': '4수04-01', 'pre': '', 'follow': ''},
+            {'code':'E3MATA08B01', 'name': '그림그래프', 'archive': '4수04-01', 'pre': '', 'follow': ''},
+            ]
+        },
+        {'lv2': '자료의 가능성', 'data':
+            [
+            {'code':'H1MATA07B03', 'name': '조합', 'archive': '10공수1-03-03', 'pre': '', 'follow': ''},
+            {'code':'H1MATA07B02', 'name': '순열', 'archive': '10공수1-03-02', 'pre': '', 'follow': ''},
+            {'code':'H1MATA07B01', 'name': '합의 법칙과 곱의 법칙을 이용하여 경우의 수 구하기', 'archive': '10공수1-03-01', 'pre': '', 'follow': ''},
+            {'code':'M2MATA09B02', 'name': '확률의 개념 및 기본 성질/확률의 계산', 'archive': '9수04-06', 'pre': '', 'follow': ''},
+            {'code':'M2MATA09B01', 'name': '경우의 수', 'archive': '9수04-05', 'pre': '', 'follow': ''},
+            {'code':'E5MATA12B02C05', 'name': '사건의 가능성 예상하고 판단하기', 'archive': '6수04-06', 'pre': '', 'follow': ''},
+            {'code':'E5MATA12B02C04', 'name': '사건이 일어날 가능성을 수로 표현하기', 'archive': '6수04-05', 'pre': '', 'follow': ''},
+            {'code':'E5MATA12B02C03', 'name': '사건이 일어날 가능성을 말로 표현하기', 'archive': '6수04-04', 'pre': '', 'follow': ''},
+            ]
+        },
+        ]
+    }
+]
+
+function getNameByCode(x) {
+    for (let i = 0; i < dataset.length; i++) {
+        const lv1Data = dataset[i].data;
+        for (let j = 0; j < lv1Data.length; j++) {
+            const lv2Data = lv1Data[j].data;
+            for (let k = 0; k < lv2Data.length; k++) {
+                if (lv2Data[k].code === x) {
+                    return lv2Data[k].name;
+                }
+            }
+        }
+    }
+    return null;
+}
+
+
+function addRowsToTable(tableSelector, dataset_set, isReverse) {
+    dataset_set.forEach(function (lv1Data) {
+        let group_button = `<div><span class='all'>전체 연결</span></div>`
+        let lv1 = `
+            <div class="table group">
+                <div class="lv1 lv">${lv1Data.lv1}${group_button}</div>
+                <div class="lv-group" group="${lv1Data.lv1}">
+            </div>
+        `;
+        $(tableSelector).append(lv1);
+        lv1Data.data.forEach(function (lv2Data) {
+            let lv2 = `
+                <div class="group">
+                    <div class="lv2 lv">${lv2Data.lv2}${group_button}</div>    
+                    <div class="group" group="${lv2Data.lv2}">
+                    </div>
+                </div>
+            `;
+            if (lv2Data.lv2 == '집합과 명제') {
+                $(tableSelector).find(`[group="행렬"]`).parent().last().append(lv2);
+            }
+            else{
+                $(tableSelector).find(`[group="${lv1Data.lv1}"]`).last().append(lv2);
+            } 
+            let lv2data_dataset = lv2Data.data;
+            if (isReverse) {
+                lv2data_dataset = lv2data_dataset.reverse();
+            }
+            lv2data_dataset.forEach(function (data, index) {
+
+                
+                let pre = data.pre ? data.pre.split(',').map(p => '<i class="fa-solid fa-play fa-flip-horizontal ' + p.trim().slice(0, 2) + '"></i> ').join('') : '';
+                let follow = data.follow ? data.follow.split(',').map(f => '<i class="fa-solid fa-play ' + f.trim().slice(0, 2) + '"></i> ').join('') : '';
+                
+                let pre_text = data.pre ? `<div class="t">선수학습</div><div class="bullet_group">` + data.pre.split(',').map(p => {
+                    const name = getNameByCode(p.trim());
+                    if(name) {return `
+                        <i class="fa-solid fa-play fa-flip-horizontal ${p.trim().slice(0,2)}"></i> 
+                        <div class='popup_bullet ${p.trim().slice(0,2)}' relatedCode='${p.trim()}' direction='pre'>
+                            <div class='popup_bullet_name'><span class='${p.trim().slice(0,2)}'>${p.trim().slice(0,2)}</span>${name}</div>
+                            <div class='popup_bullet_code'>${p.trim()}</div>
+                        </div>
+                            `;}
+                }).join('</div><div class="bullet_group">') + '</div>' : '';
+
+                let follow_text = data.follow ? `<div class="t">후속학습</div><div class="bullet_group">` + data.follow.split(',').map(f => {
+                    const name = getNameByCode(f.trim());
+                    if(name) {return `
+                        <i class="fa-solid fa-play ${f.trim().slice(0,2)}"></i> 
+                        <div class='popup_bullet ${f.trim().slice(0,2)}' relatedCode='${f.trim()}' direction='follow'>
+                            <div class='popup_bullet_name'><span class='${f.trim().slice(0,2)}'>${f.trim().slice(0,2)}</span>${name}</div>
+                            <div class='popup_bullet_code'>${f.trim()}</div>
+                        </div>
+                            `;}
+                }).join('</div><div class="bullet_group">') + '</div>' : '';
+
+                let popup = ''
+                if (data.pre || data.follow) {
+                    popup = `
+                    <div class="popup">
+                        <div class="connect_all">전체 연결<span><i class="fa-solid fa-arrows-split-up-and-left fa-rotate-180"></i></span></div>
+                        ${pre_text}
+                        ${follow_text}
+                    </div>
+                `;
+                }
+                let level_class = 'elem';
+                if (data.code.slice(0, 1) != 'E') {
+                    level_class = 'high';
+                }
+                let row = `
+                    <div class="cell ${level_class}" cell_code="${data.code}">
+                        <div class="cell_number ${data.code.slice(0, 2)}">${data.code.slice(0, 2)}</div>
+                        <div class="cell_content">  
+                            <div class="cell_name ${level_class}">${data.name}</div>
+                            <div class="cell_info">
+                                <div class="cell_info_left">
+                                    <div class="cell_code ${data.code.slice(0, 2)}">${data.code}</div>
+                                    <div> / </div>
+                                    <div class="cell_archive">${data.archive}</div>
+                                </div>
+                                <div class="cell_info_right">
+                                    <span class="pre">${pre}</span>
+                                    <span class="follow">${follow}</span>
+                                        ${popup}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $(tableSelector).find(`[group="${lv2Data.lv2}"]`).last().append(row);
+                // $(tableSelector).append(row);
+            });
+        });
+    })
+    $('#table-group').append('<div class="right-margin"></div>');
+}
+
+addRowsToTable('#table-group', dataset, true);
+
+</script>
+
+
+<script>
+
+function dr(sourceObj, target, direction) {
+    const targetObj = $('div').filter(function() { return $(this).attr('cell_code') === target; })
+    const obj1 = sourceObj.get(0);
+    const obj2 = targetObj.get(0);
+    targetObj.addClass('selected s_' +direction)
+    sourceObj.addClass('findRelated')
+
+    let code_source = sourceObj.attr('cell_code');
+    let code_target = targetObj.attr('cell_code');
+
+    let lineColor
+    if (direction == 'pre') {lineColor = '#b452d2';}
+        else if (direction == 'follow') {lineColor = '#778ae2';}
+        else {lineColor = '#000000';}
+    const lineSvg = $('<svg class="line-svg" cell_code=' + code_source + ',' + code_target+ '></svg>').attr('width', $(document).width()).attr('height', $(document).height())[0];
+    $('body').append(lineSvg);
+    
+    const rect1 = obj1.getBoundingClientRect();
+    const rect2 = obj2.getBoundingClientRect();
+
+    const isALeftOfB = rect1.left < rect2.left;
+    const isARightOfB = rect1.left > rect2.left;
+    // const isATopOfB = rect1.top < rect2.top;
+    // const isABottomOfB = rect1.top > rect2.top;
+    
+
+    let x1 = rect1.left + rect1.width + window.scrollX;
+    let y1 = rect1.top + rect1.height / 2 + window.scrollY;
+    let x2 = rect2.left + window.scrollX;
+    let y2 = rect2.top + rect2.height / 2 + window.scrollY;
+    
+    if (isARightOfB) {
+        x1 = rect1.left + window.scrollX;
+        x2 = rect2.left + rect2.width + window.scrollX;
+    }
+
+    let curve = Math.abs(x1 - x2) / 2;
+    // let curve = 0;
+    if (curve == 0) {curve = 80;}
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    if (rect1.left < rect2.left) {
+        path.setAttribute('d', `M${x1},${y1} C${x1 + curve},${y1} ${x2 - curve},${y2} ${x2},${y2}`);
+    } else {
+        path.setAttribute('d', `M${x1},${y1} C${x1 - curve},${y1} ${x2 + curve},${y2} ${x2},${y2}`);
+    }
+    path.setAttribute('stroke', lineColor);
+    path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('fill', 'none');
+
+    lineSvg.appendChild(path);
+
+    // Add arrowhead to the end of the line
+    const arrowhead = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    if (direction == 'pre') {
+        if (isARightOfB) {
+            arrowhead.setAttribute('d', `M${x1},${y1} L${x1 - 10},${y1 - 5} L${x1 - 10},${y1 + 5} Z`);
+        } else {
+            arrowhead.setAttribute('d', `M${x1},${y1} L${x1 + 10},${y1 - 5} L${x1 + 10},${y1 + 5} Z`);
+        }
+    } else if (direction == 'follow') {
+        if (isARightOfB) {
+            arrowhead.setAttribute('d', `M${x2},${y2} L${x2 + 10},${y2 - 5} L${x2 + 10},${y2 + 5} Z`);
+        } else {
+            arrowhead.setAttribute('d', `M${x2},${y2} L${x2 - 10},${y2 - 5} L${x2 - 10},${y2 + 5} Z`);
+        }
+    }
+    arrowhead.setAttribute('fill', lineColor);
+    lineSvg.appendChild(arrowhead);
+
+    $('.findRelated, .selected').hover(function() {
+        const cellCode = $(this).attr('cell_code');
+        $('.line-svg').css('opacity', '0.2');
+        $('.line-svg').each(function() {
+            const svgCellCodes = $(this).attr('cell_code').split(',');
+            if (svgCellCodes.includes(cellCode)) {
+                $(this).css('opacity', '1');
+            }
+        });
+    }, function() {
+        $('.line-svg').css('opacity', '');
+    });
+}
+
+
+
+// const obj1 = $('div').filter(function() { return $(this).text() === 'M3MATA01B01'; }).parent().parent().parent().parent().get(0);
+
+</script>
+
+<script>
+    $('#reverse-button').click(function() {
+        $('#reset-button').click();
+        $('#table-group').empty();
+        addRowsToTable('#table-group', dataset, true);
+    });
+    $('#minimum-button').click(function() {
+        $('.cell_number').toggle();
+        $('.cell_info').toggle();
+        $('.cell').toggleClass('small');
+        $('.cell_name').toggleClass('small');
+        let tableWidth
+        if ($('html').css('--table_width') == '220px') {
+            tableWidth = '140px';
+        } else {
+            tableWidth = '220px';
+        }
+        $('html').css('--table_width', tableWidth);
+    });
+    $('#minimum-width-button').click(function() {
+        $('.cell_number').toggle();
+        $('.cell_info_left').toggle();
+        $('.cell_name').toggleClass('small');
+        $('.cell_info_right').toggleClass('small');
+        let tableWidth
+        if ($('html').css('--table_width') == '220px') {
+            tableWidth = '140px';
+        } else {
+            tableWidth = '220px';
+        }
+        $('html').css('--table_width', tableWidth);
+    });
+    $('#reset-button').click(function() {
+        $('.line-svg').remove();
+        $('.findRelated, .selected, .s_pre, .s_follow').removeClass('findRelated selected s_pre s_follow');
+    })
+
+    function drawRelated(a) {
+        const cell = a.closest('.cell');
+        const target = a.attr('relatedcode');
+        const direction = a.attr('direction');
+        dr(cell, target, direction);
+    }
+    $(document).on('click', '.popup_bullet', function() {
+        drawRelated($(this));
+        const target = $(this).attr('relatedcode');
+        const targetDiv = $(`div[cell_code="${target}"]`);
+        const targetOffset = targetDiv.offset().left;
+        const targetWidth = targetDiv.outerWidth();
+        const targetHeight = targetDiv.outerHeight();
+        const targetCenterX = targetOffset + (targetWidth / 2);
+        const targetCenterY = targetDiv.offset().top + (targetHeight / 2);
+        const windowWidth = $(window).width();
+        const windowHeight = $(window).height();
+        const scrollPositionX = targetCenterX - (windowWidth / 2);
+        const scrollPositionY = targetCenterY - (windowHeight / 2);
+        $('html, body').animate({
+            scrollLeft: scrollPositionX,
+            scrollTop: scrollPositionY
+        }, 500);
+    })
+
+    $(document).on('click', '.connect_all', function() {
+        $(this).parent().find('.popup_bullet').each(function() {
+            drawRelated($(this));
+        })
+    })
+
+    $(document).on('click', '.lv .all', function() {
+        $(this).parent().parent().siblings().find('.popup_bullet').each(function() {
+            drawRelated($(this));
+        })
+    })
+
+$(document).on('keydown', function(event) {
+    $(document).on('keydown', function(event) {
+        if (event.key === 'q' || event.key === 'ㅂ') {
+            $('#reverse-button').click();
+        }
+    });
+});
+
+$(document).on('keydown', function(event) {
+    if (event.key === 'e' || event.key === 'ㄷ') {
+        $('#minimum-button').click();
+    }
+});
+$(document).on('keydown', function(event) {
+    if (event.key === 'r' || event.key === 'ㄱ') {
+        $('#reset-button').click();
+    }
+});
+
+</script>
+
+</body>
+</html>
