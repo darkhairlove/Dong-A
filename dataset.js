@@ -1050,7 +1050,7 @@ let sub_dataset = [
 {'sub_code': 'H1ENGA09B03C06', 'desc': '관용어구 이해하기,piece of cake,in the same boat,white elephant,crocodile tears,make a beeline'}
 ]
 let dataset_english = [
-    {'lv1': '영어', 'data':
+    {'lv1': '소개하기', 'data':
         [
             {'lv2': '소개하기', 'data':
                 [

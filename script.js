@@ -64,11 +64,13 @@ function addRowsToTable(tableSelector, dataset, isReverse) { // '#table-group', 
             </div>
         `;
         $(tableSelector).append(lv1);
-        lv1Data.data.forEach(function (lv2Data) {
+
+        // lv1Data lv2Data
+        lv1Data.data.forEach((lv2Data) => {
             let lv2 = `
                 <div class="group">
                     <div class="lv2 lv">${lv2Data.lv2}${group_button}</div>    
-                    <div class="group" group="${lv2Data.lv2}">
+                    <div class="group" group="lv2_${lv2Data.lv2}">
                     </div>
                 </div>
             `;
@@ -79,9 +81,12 @@ function addRowsToTable(tableSelector, dataset, isReverse) { // '#table-group', 
                 $(tableSelector).find(`[group="${lv1Data.lv1}"]`).last().append(lv2);
             } 
             let lv2data_dataset = lv2Data.data;
+            
+            // check reverse
             if (isReverse) {
                 lv2data_dataset = lv2data_dataset.reverse();
             }
+
             lv2data_dataset.forEach(function (data, index) {
                 
                 let pre = data.pre ? data.pre.split(',').map(function(p) {
@@ -164,7 +169,7 @@ function addRowsToTable(tableSelector, dataset, isReverse) { // '#table-group', 
                         </div>
                     </div>
                 `;
-                $(tableSelector).find(`[group="${lv2Data.lv2}"]`).last().append(row);
+                $(tableSelector).find(`[group="lv2_${lv2Data.lv2}"]`).last().append(row);
             });
         });
     })
