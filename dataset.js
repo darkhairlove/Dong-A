@@ -1,7 +1,7 @@
 let dataset_math = [
     {'lv1': '수와 연산', 'data':
-        [{'lv2': '수의 체계', 'data':
-            [
+        [{'lv2': '수의 체계', 'data': 
+            [ // code, name, archive, pre, follow
                 {'code':'H1MATA03B01', 'name': '복소수의 뜻과 성질 이해하기', 'archive': '10공수1-02-01', 'pre': '', 'follow': 'H1MATA03B02'},
                 {'code':'M3MATA01B03', 'name': '실수의 대소관계', 'archive': '9수01-09', 'pre': '', 'follow': ''},
                 {'code':'M3MATA01B02', 'name': '무리수와 실수의 개념 이해하기', 'archive': '9수01-08', 'pre': '', 'follow': ''},
@@ -301,12 +301,6 @@ let dataset_math = [
         ]
     }
 ]
-
-
-
-
-            
-
 let sub_dataset = [
     {'sub_code' : 'E3MATA01B01C01', 'desc' : '받아올림이 없는 (세 자리 수)+(세 자리수) 계산하기'},
     {'sub_code' : 'E3MATA01B01C02', 'desc' : '받아올림이 한 번 있는 (세 자리 수)+(세 자리 수) 계산하기'},
@@ -1055,35 +1049,6 @@ let sub_dataset = [
 {'sub_code': 'H1ENGA09B03C05', 'desc': '비유적 표현 이해하기,put a roof over someone"s head'},
 {'sub_code': 'H1ENGA09B03C06', 'desc': '관용어구 이해하기,piece of cake,in the same boat,white elephant,crocodile tears,make a beeline'}
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 let dataset_english = [
     {'lv1': '영어', 'data':
         [
@@ -1274,8 +1239,6 @@ let dataset_english = [
         ]
     }
 ]
-
-
 let dataset_information = [
     {'lv1': '수와 연산', 'data':
         [
