@@ -1,13 +1,17 @@
 // code로 해당하는 name 찾기
-function getNameByCode(x) {
+function getNameByCode(x) { // x: 'pre' or 'follow' obj
     for (let i = 0; i < dataset.length; i++) {
         const lv1Data = dataset[i].data;
+        
         for (let j = 0; j < lv1Data.length; j++) {
             const lv2Data = lv1Data[j].data;
+        
             for (let k = 0; k < lv2Data.length; k++) {
+        
                 if (lv2Data[k].code === x) {
                     return lv2Data[k].name;
                 }
+
             }
         }
     }
@@ -50,8 +54,8 @@ function findLvName(code) {
 
 let except_level = ['집합과 명제', '시각 자료 활용하기', '계획 공유하기', '약속 정하기'] // exception for making another column by main topic
 // dataset 기반으로 페이지에 테이블 추가하기
-function addRowsToTable(tableSelector, dataset_set, isReverse) {
-    dataset_set.forEach(function (lv1Data) {
+function addRowsToTable(tableSelector, dataset, isReverse) { // '#table-group', dataset, true
+    dataset.forEach(function (lv1Data) {
         let group_button = `<div><span class='all'>전체 연결</span></div>`
         let lv1 = `
             <div class="table group">
@@ -79,7 +83,6 @@ function addRowsToTable(tableSelector, dataset_set, isReverse) {
                 lv2data_dataset = lv2data_dataset.reverse();
             }
             lv2data_dataset.forEach(function (data, index) {
-
                 
                 let pre = data.pre ? data.pre.split(',').map(function(p) {
                     let relatedCount = countRelated(p.trim(), 0, 'pre');
@@ -98,7 +101,6 @@ function addRowsToTable(tableSelector, dataset_set, isReverse) {
                     }
                     return `<i class="${relatedNested} fa-solid fa-play ` + p.trim().slice(0, 2) + '"></i> '
                 }).join('') : '';
-                
                 
                 let pre_text = data.pre ? `<div class="t">선수학습</div><div class="bullet_group">` + data.pre.split(',').map(p => {
                     const name = getNameByCode(p.trim());
@@ -545,8 +547,8 @@ function showModal(sourceObj){
 }
 
 // initialize
-let subject_name = "math"
-let dataset = dataset_math;
+let subject_name = "english"
+let dataset = dataset_english;
 
 addRowsToTable('#table-group', dataset, true); // initialize
 addtionalInfo()
