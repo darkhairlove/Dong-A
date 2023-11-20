@@ -1,6 +1,3 @@
-
-let subject_name = "math"
-let dataset = dataset_math;
 // code로 해당하는 name 찾기
 function getNameByCode(x) {
     for (let i = 0; i < dataset.length; i++) {
@@ -210,11 +207,6 @@ function addtionalInfo() {
     })
 }
 
-addRowsToTable('#table-group', dataset, true);
-addtionalInfo()
-
-
-
 // 연결선 만들기 함수 정의
 function dr(sourceObj, target, direction, page) {
     
@@ -320,8 +312,6 @@ function dr(sourceObj, target, direction, page) {
     });
 }
 
-
-
 // 기능 버튼 액션 정의
 $('.subject').click(function() { 
     const subject = $(this).attr('subject');
@@ -411,7 +401,6 @@ $(document).on('keydown', function(event) {
         $('.modal-close').click();
     }
 });
-
 
 // 연결 선 그리기 액션 정의
 function drawRelated(a,page) {
@@ -554,3 +543,10 @@ function showModal(sourceObj){
     // $('.modal-content').append()
 
 }
+
+// initialize
+let subject_name = "math"
+let dataset = dataset_math;
+
+addRowsToTable('#table-group', dataset, true); // initialize
+addtionalInfo()
